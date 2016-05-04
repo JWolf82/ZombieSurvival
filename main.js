@@ -14,11 +14,12 @@ var button;
 var button1;
 var buttonLabel1;
 var pDamage;
-
+var Zombie;
+var Soldier;
 
 //Begin Create
 function create() {
-    
+game.physics.startSystem(Phaser.Physics.ARCADE);
     
 //Background Image and Audio
     game.add.sprite(-600,0, 'ground')
@@ -54,7 +55,7 @@ function create() {
 //Start Horde/Create new NPC
     var horde = []
     
-    for(var x = 0; x<=4; x++){
+    for(var x = 0; x<=5; x++){
             var z = [-215, -186, -146, -87, -45]
             var Zombie = new Npc(
             25,
@@ -64,9 +65,21 @@ function create() {
      //Zombie Animation Shamble  !!!!!!!!!!
         var shamble = Zombie.sprite.animations.add('shamble', [0,1,2,3,4,5,6,7,8]);
         Zombie.sprite.animations.play('shamble', 10, true);
-        game.add.tween(Zombie.sprite).to({ x: game.width }, 15000, Phaser.Easing.Linear.None, true);
-
-
+       
+        // game.add.tween(Zombie.sprite).to({ x: game.width }, 15000, Phaser.Easing.Linear.None, true);
+    
+    //Zombie physics detection
+    game.physics.enable(Zombie.sprite, Phaser.Physics.ARCADE);
+	Zombie.sprite.body.velocity.x = 80;
+	Zombie.sprite.body.immovable = true;
+	Zombie.sprite.body.collideWorldBounds = true;
+	Zombie.sprite.body.bounce.setTo(1, 0);
+    
+    //Soldier physics detection
+    game.physics.enable(Soldier.sprite, Phaser.Physics.ARCADE);
+	Soldier.sprite.body.collideWorldBounds = true;
+	Soldier.sprite.body.bounce.setTo(1, 0);
+	Soldier.sprite.body.immovable = true;
 
 //Horde array 
         horde.push(Zombie)
@@ -135,12 +148,16 @@ drawnActionMenu.anchor.setTo(0.5, 0.5);
             zDie.animations.play('zDie');
                 horde[lastZ].sprite.kill()
                 horde.splice(lastZ, 1)
-                console.log(horde)
          } 
-   
-   
-   
+
     }
+    
+
+        if(Zombie.sprite.x === 500 && Zombie.sprite.y === 440){
+            console.log("Brains")
+        }
+        
+    
     
 
 
@@ -158,8 +175,6 @@ drawnActionMenu.anchor.setTo(0.5, 0.5);
     
     
     
-    
-    
    
 }
 //End create 
@@ -171,7 +186,7 @@ drawnActionMenu.anchor.setTo(0.5, 0.5);
     
     
 function update(){
-    
+    // game.physics.arcade.collide(game.Zombie.sprite, game.Soldier.sprite);
     
 }
 

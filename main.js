@@ -14,14 +14,12 @@ var button;
 var button1;
 var buttonLabel1;
 var pDamage;
+var zPositionX;
 var Zombie;
 var Soldier;
-var horde = [];
-var Zeds;
+
 //Begin Create
 function create() {
-game.physics.startSystem(Phaser.Physics.ARCADE);
-    
     
     
 //Background Image and Audio
@@ -30,7 +28,6 @@ game.physics.startSystem(Phaser.Physics.ARCADE);
     //  back.play();
     //  back.volume = .015
     
-  
 //Objects
     function Player(name, animate, health, bullets, sprite, dmg){
         this.name = name,
@@ -57,7 +54,7 @@ game.physics.startSystem(Phaser.Physics.ARCADE);
      
     
 //Start Horde/Create new NPC
-
+    var horde = []
     
     for(var x = 0; x<=4; x++){
             var z = [-215, -186, -146, -87, -45]
@@ -65,25 +62,13 @@ game.physics.startSystem(Phaser.Physics.ARCADE);
             25,
             game.add.sprite(z[x], 440, 'zombie')
             )
-            
-     //Zombie Animation Shamble 
+
+     //Zombie Animation Shamble  !!!!!!!!!!
         var shamble = Zombie.sprite.animations.add('shamble', [0,1,2,3,4,5,6,7,8]);
         Zombie.sprite.animations.play('shamble', 10, true);
-       
+        game.add.tween(Zombie.sprite).to({ x: 510 }, 15000, Phaser.Easing.Linear.none, true);
 
-        
-    
-    //Zombie physics detection
-    game.physics.enable(Zombie.sprite, Phaser.Physics.ARCADE);
-	Zombie.sprite.body.velocity.x = 80;
-	Zombie.sprite.body.immovable = true;
-	Zombie.sprite.body.setSize(20, 64)
-    
-    //Soldier physics detection
-    game.physics.enable(Soldier.sprite, Phaser.Physics.ARCADE);
-	Soldier.sprite.body.collideWorldBounds = true;
-	Soldier.sprite.body.bounce.setTo(1, 0);
-	Soldier.sprite.body.immovable = true;
+
 
 //Horde array 
         horde.push(Zombie)
@@ -144,22 +129,24 @@ drawnActionMenu.anchor.setTo(0.5, 0.5);
                
         //Zed animation death       
         if(horde[lastZ].health <= 0){
-         var pointX = Zombie.sprite.x
+         var pointX = Zombie.sprite.x -13
          var pointY = Zombie.sprite.y
          console.log(pointX, pointY)
          var zDie = this.game.add.sprite(pointX, pointY, 'zombie')
             zDie.animations.add('zDie', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,14,15,16,17,18,19,20,21,22,23,24], false);
             zDie.animations.play('zDie');
-            horde[lastZ].sprite.kill()
-            horde.splice(lastZ, 1)
+                horde[lastZ].sprite.kill()
+                horde.splice(lastZ, 1)
+                console.log(horde)
          } 
-
+   
+   
+   
     }
     
-    
-    
-  
-   
+
+
+
 }
 //End create 
 
@@ -170,13 +157,7 @@ drawnActionMenu.anchor.setTo(0.5, 0.5);
     
     
 function update(){
-    
-    game.physics.arcade.collide(Zombie.sprite, Soldier.sprite, kill)
-    
+    if(Zombie.sprite.x >= 495){
+        Soldier.sprite.kill()
+    }
 }
-
-function kill(zombie, soldier){
-    soldier.kill()
-}
-
-   

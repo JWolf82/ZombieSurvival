@@ -17,11 +17,15 @@ var pDamage;
 var zPositionX;
 var Zombie;
 var Soldier;
-var zXpos;
+var horde;
+var score;
+var healthText;
+var scoreLabels;
+
 
 //Begin Create
 function create() {
-    game.physics.startSystem(Phaser.Physics.ARCADE);
+    
     
 //Background Image and Audio
     game.add.sprite(-600,0, 'ground')
@@ -55,41 +59,10 @@ function create() {
      
     
 //Start Horde/Create new NPC
-    var horde = []
+    horde = []
     
-    for(var x = 0; x<=30; x++){
-        
-            var z = [-56,
-                    -87,
-                    -107,
-                    -184,
-                    -206,
-                    -254,
-                    -268,
-                    -288,
-                    -503,
-                    -507,
-                    -636,
-                    -654,
-                    -733,
-                    -751,
-                    -901,
-                    -970,
-                    -1007,
-                    -1040,
-                    -1052,
-                    -1103,
-                    -1113,
-                    -1138,
-                    -1185,
-                    -1191,
-                    -1240,
-                    -1288,
-                    -1348,
-                    -1360,
-                    -1393,
-                    -1448]
-                    
+    for(var x = 0; x<=4; x++){
+            var z = [-215, -186, -146, -87, -45]
             Zombie = new Npc(
             25,
             game.add.sprite(z[x], 440, 'zombie')
@@ -98,14 +71,13 @@ function create() {
      //Zombie Animation Shamble  !!!!!!!!!!
         var shamble = Zombie.sprite.animations.add('shamble', [0,1,2,3,4,5,6,7,8]);
         Zombie.sprite.animations.play('shamble', 10, true);
-        game.add.tween(Zombie.sprite).to({ x: 510 }, 15000, Phaser.Easing.Linear.none, true);
-      
+        game.add.tween(Zombie.sprite).to({ x: 510 }, 8000, Phaser.Easing.Linear.none, true);
+
+
 
 //Horde array 
         horde.push(Zombie)
     };
-    
-    
   
     
     
@@ -127,12 +99,18 @@ drawnActionMenu.anchor.setTo(0.5, 0.5);
     bmd.ctx.fill();
     drawnActionMenu = game.add.sprite(650, 50, bmd);
     drawnActionMenu.anchor.setTo(0.5, 0.5);
+
+    
     
     //Buttons
     var buttonStyle = { font: "32px Arial", fill: "#ffffff" };
     button1 = game.add.button( 650, 10, null, playerShoot);
     buttonLabel1 = game.make.text( 0, 0, "Shoot", buttonStyle)
     button1.addChild( buttonLabel1 );
+
+    // var button2 = game.add.button( 650, 60, null, reload);
+    // var buttonLabel2 = game.make.text( 0, 0, "Reload", buttonStyle)
+    // button2.addChild( buttonLabel2 );
 
 
 //Methods
@@ -153,23 +131,29 @@ drawnActionMenu.anchor.setTo(0.5, 0.5);
         horde[lastZ].health = newZombieHealth
                
         //Zed animation death       
-        if(horde[lastZ].health <= 0){
-         var pointX = Zombie.sprite.x -13
+       if(horde[lastZ].health <= 0){
+         var pointX = Zombie.sprite.x
          var pointY = Zombie.sprite.y
          console.log(pointX, pointY)
          var zDie = this.game.add.sprite(pointX, pointY, 'zombie')
             zDie.animations.add('zDie', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,14,15,16,17,18,19,20,21,22,23,24], false);
             zDie.animations.play('zDie');
-                horde[lastZ].sprite.kill()
-                horde.splice(lastZ, 1)
-                console.log(horde)
+             horde[lastZ].sprite.kill()
+             horde.splice(lastZ, 1)
+             score += 1
+             scoreLabels.text = score
+            
+            // var healthText = game.add.text(520, 35, score, style);
+            // healthText.setText(score)
          } 
-   
-   
-   
+         
+
+        
     }
     
-
+score = 0
+    showLabels()
+    scoreLabels.text = score
 
 
 }
@@ -182,9 +166,32 @@ drawnActionMenu.anchor.setTo(0.5, 0.5);
     
     
 function update(){
-    if(Zombie.sprite.x >= 495){
+    //HealthCount
+    
+    
+
+    if(horde.length != 0){
+        if(Zombie.sprite.x >= 504){
         Soldier.sprite.kill()
+        }
     }
+}
+
+function kill(){
+    kill()
+}
+
+function updateText() {
+    
+    healthText.setText(score);
+
+}
+
+function showLabels(){
+    var text = "0"
+    var style = { font: "40px Arial", fill: "#fff", align: "center" };
+    scoreLabels = game.add.text(520, 35, text, style)
     
     
 }
+

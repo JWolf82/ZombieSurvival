@@ -1,3 +1,17 @@
 #game {
 margin-top: 100px;
 }
+
+body {
+    background-color: black;
+}
+
+.header {
+    background-color: gold;
+    width: 100%;
+}
+
+.container {
+    padding: 0px;
+    margin: 0px;
+}
